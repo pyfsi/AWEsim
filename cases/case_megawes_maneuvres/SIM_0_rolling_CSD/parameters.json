@@ -1,0 +1,276 @@
+{
+  "settings": {
+    "timestep_start": 0,
+    "number_of_timesteps": 900,
+    "delta_t": 0.01,
+    "save_restart": 50
+  },
+  "coupled_solver": {
+    "type": "coupled_solvers.one_way",
+    "settings": {
+      "omega": 0.01,
+      "write_results": 10,
+      "model": {
+        "type": "coupled_solvers.models.ls",
+        "settings": {
+          "min_significant": 1e-09,
+          "q": 10
+        }
+      }
+    },
+    "predictor": {
+      "type": "predictors.linear"
+    },
+    "convergence_criterion": {
+      "type": "convergence_criteria.or",
+      "settings": {
+        "criteria_list": [
+          {
+            "type": "convergence_criteria.iteration_limit",
+            "settings": {
+              "maximum": 20
+            }
+          },
+          {
+            "type": "convergence_criteria.relative_norm",
+            "settings": {
+              "tolerance": 1e-3,
+              "order": 2
+            }
+          }
+        ]
+      }
+    },
+    "solver_wrappers": [
+      {
+        "type": "solver_wrappers.fluent.v2023R1",
+        "settings": {
+          "working_directory": "CFD",
+          "case_file": "simulation.cas.h5",
+          "dimensions": 3,
+          "unsteady": true,
+          "end_of_timestep_commands":
+		"(ti-menu-load-string \"report forces wall-forces n wingup wingdown wingtip_left wingtip_right wingcut_left wingcut_right tail vtail_left vtail_right aileron_up_left aileron_down_left aileron_up_right aileron_down_right () 1 0 0 y forces.frp\") (ti-menu-load-string \"report forces wall-moments n wingup wingdown wingtip_left wingtip_right wingcut_left wingcut_right tail vtail_left vtail_right aileron_up_left aileron_down_left aileron_up_right aileron_down_right () 0 0 0 1 0 0 y moments.frp\")" ,
+          "thread_names": [
+            "wingdown", "wingup", "aileron_down_left", "aileron_up_left", "aileron_down_right" , "aileron_up_right"
+          ],
+          "interface_input": [
+            {
+              "model_part": "wingdown_nodes",
+              "variables": [
+                "displacement"
+              ]
+            },
+            {
+              "model_part": "wingup_nodes",
+              "variables": [
+                "displacement"
+              ]
+            },
+            {
+              "model_part": "aileron_down_left_nodes",
+              "variables": [
+                "displacement"
+              ]
+            },
+            {
+              "model_part": "aileron_up_left_nodes",
+              "variables": [
+                "displacement"
+              ]
+            },
+            {
+              "model_part": "aileron_down_right_nodes",
+              "variables": [
+                "displacement"
+              ]
+            },
+            {
+              "model_part": "aileron_up_right_nodes",
+              "variables": [
+                "displacement"
+              ]
+            }
+            ],
+          "interface_output": [
+            {
+              "model_part": "wingdown_faces",
+              "variables": [
+                "pressure",
+                "traction"
+              ]
+            },
+            {
+              "model_part": "wingup_faces",
+              "variables": [
+                "pressure",
+                "traction"
+              ]
+            },
+            {
+              "model_part": "aileron_down_left_faces",
+              "variables": [
+                "pressure",
+                "traction"
+              ]
+            },
+            {
+              "model_part": "aileron_up_left_faces",
+              "variables": [
+                "pressure",
+                "traction"
+              ]
+            },
+            {
+              "model_part": "aileron_down_right_faces",
+              "variables": [
+                "pressure",
+                "traction"
+              ]
+            },
+            {
+              "model_part": "aileron_up_right_faces",
+              "variables": [
+                "pressure",
+                "traction"
+              ]
+            }
+          ],
+          "cores": 39,
+          "fluent_gui": false,
+          "max_nodes_per_face": 10,
+          "flow_iterations": 20,
+          "save_results": 50,
+          "rigid_body_motion": true,
+          "moving_zones": ["wing_hole-zone","tail-zone","vtail_left-zone","vtail_right-zone","aileron_left-zone","aileron_right-zone"]
+        }
+      },
+      {
+        "type": "solver_wrappers.mapped",
+        "settings": {
+          "solver_wrapper": {
+            "type": "solver_wrappers.abaqus_cse.v2023",
+            "settings": {
+              "working_directory": "CSM",
+              "cores": 39,
+              "dimensions": 3,
+              "disable_modification_of_input_file": false,
+              "save_results": 5,
+              "surfaces": ["ASSEMBLY_WING_HOLE_PS", "ASSEMBLY_WING_HOLE_SS", "ASSEMBLY_AILERON_LEFT_PS", "ASSEMBLY_AILERON_LEFT_SS", "ASSEMBLY_AILERON_RIGHT_PS", "ASSEMBLY_AILERON_RIGHT_SS"],
+              "interface_input": [
+                {
+                  "model_part": "WING_HOLE_PS_load_points",
+                  "variables": [
+                    "pressure",
+                    "traction"
+                  ]
+                },
+                {
+                  "model_part": "WING_HOLE_SS_load_points",
+                  "variables": [
+                    "pressure",
+                    "traction"
+                  ]
+                },
+                {
+                  "model_part": "AILERON_LEFT_PS_load_points",
+                  "variables": [
+                    "pressure",
+                    "traction"
+                  ]
+                },
+                {
+                  "model_part": "AILERON_LEFT_SS_load_points",
+                  "variables": [
+                    "pressure",
+                    "traction"
+                  ]
+                },
+                {
+                  "model_part": "AILERON_RIGHT_PS_load_points",
+                  "variables": [
+                    "pressure",
+                    "traction"
+                  ]
+                },
+                {
+                  "model_part": "AILERON_RIGHT_SS_load_points",
+                  "variables": [
+                    "pressure",
+                    "traction"
+                  ]
+                }
+              ],
+              "interface_output": [
+                {
+                  "model_part": "WING_HOLE_PS_nodes",
+                  "variables": [
+                    "displacement"
+                  ]
+                },
+                {
+                  "model_part": "WING_HOLE_SS_nodes",
+                  "variables": [
+                    "displacement"
+                  ]
+                },
+                {
+                  "model_part": "AILERON_LEFT_PS_nodes",
+                  "variables": [
+                    "displacement"
+                  ]
+                },
+                {
+                  "model_part": "AILERON_LEFT_SS_nodes",
+                  "variables": [
+                    "displacement"
+                  ]
+                },
+                {
+                  "model_part": "AILERON_RIGHT_PS_nodes",
+                  "variables": [
+                    "displacement"
+                  ]
+                },
+                {
+                  "model_part": "AILERON_RIGHT_SS_nodes",
+                  "variables": [
+                    "displacement"
+                  ]
+                }
+              ],
+              "input_file": "MegAWES_CG_SSPS.inp",
+              "ramp": true
+            }
+          },
+          "mapper_interface_input": {
+            "type": "mappers.interface",
+            "settings": {
+              "type": "mappers.linear",
+              "settings": {
+                "directions": [
+                  "x",
+                  "y",
+                  "z"
+                ]
+              }
+            }
+          },
+          "mapper_interface_output": {
+            "type": "mappers.interface",
+            "settings": {
+              "type": "mappers.linear",
+              "settings": {
+                "directions": [
+                  "x",
+                  "y",
+                  "z"
+                ]
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}
