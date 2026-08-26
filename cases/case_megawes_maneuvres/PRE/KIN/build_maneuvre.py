@@ -4,10 +4,10 @@ from mpl_toolkits.mplot3d import Axes3D
 from pathlib import Path
 
 # AWEsim functionalities
-from data.megawes.megawes import megawes
-from functions.kinematics.DCM import update_dcm, dcm_to_euler
-from functions.kinematics.maneuvre_to_states import maneuver_to_states
-from functions.kinematics.rigid_body_motion_fluent import rigid_body_motion_fluent
+from AWEsim.aircraft.megawes.megawes import megawes
+from AWEsim.functions.kinematics.DCM import update_dcm, dcm_to_euler
+from AWEsim.functions.kinematics.maneuvre_to_states import maneuver_to_states
+from AWEsim.functions.kinematics.rigid_body_motion_fluent import rigid_body_motion_fluent
 
 # TODO
 # Plot aircraft in 3D trajectory
@@ -15,7 +15,7 @@ from functions.kinematics.rigid_body_motion_fluent import rigid_body_motion_flue
 # File directions
 FILE_DIR = Path(__file__).resolve().parent
 CASE_DIR = FILE_DIR.parent.parent
-SIM_DIR = CASE_DIR / "SIM_0"
+SIM_DIR = CASE_DIR / "SIM_0_rolling_CSD"
 
 # Settings
 write_SIM = True  # Write SIM files for Fluent simulation

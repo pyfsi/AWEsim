@@ -16,6 +16,8 @@ move_zone*
 Results
 *.png
 
+#simulation folders; use SIM0 for initialization folder
+SIM_* 
 
 # Python
 __pycache__/

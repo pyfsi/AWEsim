@@ -2,15 +2,15 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 #AWEsim functionalities
-from functions.postprocessing.visuals import (get_cfd_data_all,get_state_data,plot_timestep)
-from functions.postprocessing.create_video import create_video
+from AWEsim.functions.postprocessing.visuals import (get_cfd_data_all,get_state_data,plot_timestep)
+from AWEsim.functions.postprocessing.create_video import create_video
 
 
 # =============================================================================
 # Case settings
 # =============================================================================
 
-SIM_NAME = "SIM_rolling_CSD"
+SIM_NAME = "SIM_rolling_CSD_test2"
 
 FLOW_PROPERTY = "P"
 VIEW = "I"
@@ -28,9 +28,7 @@ SIM_DIR = CASE_DIR / SIM_NAME
 RESULTS_DIR = SIM_DIR / "CFD" / "Results"
 STATES_FILE = SIM_DIR / "states.out"
 
-ANIMATION_DIR = (
-    FILE_DIR / "Animations" / "Animation_rolling"
-)
+ANIMATION_DIR =  FILE_DIR / "Animations" / "Animation_rolling"
 
 
 # =============================================================================
@@ -164,7 +162,7 @@ if __name__ == "__main__":
     # Single timestep
     # -------------------------------------------------------------------------
 
-    #create_single_visual(timestep=500)
+    create_single_visual(timestep=50)
 
     # -------------------------------------------------------------------------
     # Animation
@@ -176,12 +174,12 @@ if __name__ == "__main__":
     # Video
     # -------------------------------------------------------------------------
 
-    create_video(
-        input_folder=ANIMATION_DIR,
-        output_file=ANIMATION_DIR / VIDEO_NAME,
-        prefix=FRAME_PREFIX,
-        start=START,
-        stop=STOP,
-        step=STEP,
-        fps=FPS,
-    )
+    # create_video(
+    #     input_folder=ANIMATION_DIR,
+    #     output_file=ANIMATION_DIR / VIDEO_NAME,
+    #     prefix=FRAME_PREFIX,
+    #     start=START,
+    #     stop=STOP,
+    #     step=STEP,
+    #     fps=FPS,
+    # )

@@ -1,7 +1,7 @@
 import numpy as np
 
 #awesim functionalities
-from functions.kinematics.DCM import update_dcm, dcm_to_euler
+from AWEsim.functions.kinematics.DCM import update_dcm, dcm_to_euler
 
 def maneuver_to_states(maneuver, Vw):
     """
