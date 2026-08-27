@@ -1,4 +1,4 @@
-include cover PhD book as 'banner'
+[![AWEsim banner](https://raw.githubusercontent.com/pyfsi/AWEsim/main/docs/images/cover_github.png)](https://github.com/pyfsi/AWEsim)
 
 # AWEsim
 
@@ -13,7 +13,7 @@ AWEsim is Build on top of CoCoNuT (Focus on FSI), adding following functionaliti
 
 The framework is currently applied to ground-gen airborne wind energy systems, but can be extented to any aircraft-like systems exhibiting dynamic motion use multiple moving control surfaces.
 
-Focus now on AWE aircraft simulation, but can be extended to anything that moves ( awesim) and deforms ( FSI, coconut), where a high-fidelity prediction of the flow around an object and its corresponding forces/moments and dynamic behavior are of interest to study.
+Focus now on AWE aircraft simulation, but can be extended to anything that moves ( awesim) and deforms (FSI, coconut), where a high-fidelity prediction of the flow around an object and its corresponding forces/moments and dynamic behavior are of interest to study.
 
 The tool can be used in a more detailed design phase where the geometry of the aircraft is known, to assess detailed unsteady phenomena.
 

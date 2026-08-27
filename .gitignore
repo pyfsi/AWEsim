@@ -14,7 +14,6 @@ cases/case_megawes_maneuvres/SIM_test_rates2/
 #Keep it clean
 move_zone*
 Results
-*.png
 
 #simulation folders; use SIM0 for initialization folder
 SIM_* 
