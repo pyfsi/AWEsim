@@ -1,25 +1,19 @@
 [![AWEsim banner](https://raw.githubusercontent.com/pyfsi/AWEsim/main/docs/images/cover_github.png)](https://github.com/pyfsi/AWEsim)
 
-# AWEsim
+# The AWEsim Manual
 
-AWEsim is a geometry-resolved aero-servo-elastic simulation framework for airborne wind energy (AWE) systems. 
+AWEsim is a geometry-resolved aero-servo-elastic simulation framework developed for airborne wind energy (AWE) systems. The aero-servo-elastic coupling algorithms and infrastructure are written in Python and build on top of [CoCoNuT](https://github.com/pyfsi/coconut), a coupling code for numerical tools for efficient partitioned multi-physics simulations, with a focus on fluid-structure interaction (FSI).
 
-The coupling algorithms and infrastructure are written in python using a partitioned approach using folowing software dependence: CoCoNuT (Coupling code), Ansys Fluent (CFD), Abaqus (CSM), AWEbox (AWE dynamics and control).
-
-AWEsim is Build on top of CoCoNuT (Focus on FSI), adding following functionalities:
-- Rigid-body motion
+The [AWEsim branch on CoCoNuT](https://github.com/pyfsi/coconut/tree/AWEsim) adds the following functionalities:
+- Rigid-body motion in the [ANSYS Fluent](https://ansys.synopsys.com/products/fluids/ansys-fluent) solver wrapper
 - Control surface deflections of aircraft
-- Coupling to dynamics and control (AWEbox)
+- Coupling to AWE system dynamics and control toolbox [AWEbox]()
 
-The framework is currently applied to ground-gen airborne wind energy systems, but can be extented to any aircraft-like systems exhibiting dynamic motion use multiple moving control surfaces.
+This github repository provides all the necessary scripts to setup and postprocess AWEsim simulations, including some examples. The simulations can be used in the design phase where the geometry of the aircraft is known, to assess detailed unsteady aero-servo-elastic phenomena.
 
-Focus now on AWE aircraft simulation, but can be extended to anything that moves ( awesim) and deforms (FSI, coconut), where a high-fidelity prediction of the flow around an object and its corresponding forces/moments and dynamic behavior are of interest to study.
+The framework is currently applied to ground-gen airborne wind energy systems, but can be extented to any aircraft-like systems exhibiting dynamic motion, flexible structure, and that use multiple moving control surfaces.
 
-The tool can be used in a more detailed design phase where the geometry of the aircraft is known, to assess detailed unsteady phenomena.
 
-What is is not? AWEsim is not a meshing tool (link to mshGen), it requires existing grids of the aircraft components and lifting surfaces as input. It is not a design tool, it requires an existing geometry as input.
-
-This manual introduces the practical implementation and use of AWEsim. For a detailed report on the methods behind it, you are refered to: Link to PhD book
 
 ## 1. Introduction
 
@@ -37,7 +31,7 @@ The focus on the simulation is on geometry-resolved aerodynamics and the inclusi
 
 Focus on high-fidelity simulations using CFD, the virtual wind environment (VWE) is the core of AWEsim.
 
-
+This manual introduces the practical implementation and use of AWEsim. For a detailed report on the methods behind it, you are refered to: Link to PhD book
 
 ## 2. Installation
 
@@ -62,6 +56,8 @@ pip install -r requirements.txt
 ## 4. User Guide
 
 ### Flying Maneuvres
+
+![Rolling maneuvre](https://raw.githubusercontent.com/pyfsi/AWEsim/main/docs/images/Pressure_rolling.mp4)
 
 ### Prescribed pumping cycle simulations
 To be published.
