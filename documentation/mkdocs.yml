@@ -44,4 +44,9 @@ markdown_extensions:
 extra_javascript:
   - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
 nav:
-  - Introduction: README.md
+  - Introduction: introduction.md 
+  - Installation: README.md
+  - Overview Code: overview_code.md
+  - Flying Maneuvres: flying_maneuvres.md
+  - Pumping Cycle Simulations: pumping_cycle_simulations.md
+  - Developer Guide: developer_guide.md
