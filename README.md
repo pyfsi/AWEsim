@@ -35,21 +35,26 @@ This manual introduces the practical implementation and use of AWEsim. For a det
 
 ## 2. Installation
 
-Describe how to install or set up the project.
+Choose or create a directory (e.g. `Software`) to install AWEsim, move to this directory and clone the Github repository with SSH:
 
 ```bash
-git clone https://github.com/username/project.git
-cd project
-pip install -r requirements.txt
+git clone git@github.com:pyfsi/AWEsim.git
+cd AWEsim
+chmod +x setup_awesim.sh
+./setup_awesim.sh
 ```
+Make sure your public key is added to you github account. The AWEsim project is set up by running `setup_awesim.sh`, which takes care off:
 
-- run install_awesim.sh 
-- git clone coconut branch AWEsim
-- git clone AWEsim
-- add software folder to bashrc
-- Get fluent files; from where? Zenodo?
-- add github conncetion using public key
-- VSCode: set python executable
+- Installing CoCoNuT (branch AWEsim)
+- Installing AWEbox (TODO)
+- Installing mshGen (TODO)
+- Installing python requirements.txt (TODO)
+- Configuring .bashrc
+- Download example (CFD) files from UGent FM cluster
+
+### Quick test
+
+### Getting started
 
 ## 3. Project structure
 
