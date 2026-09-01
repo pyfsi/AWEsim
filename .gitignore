@@ -11,6 +11,10 @@ cases/case_megawes_maneuvres/SIM_test_rates2/
 *.dat
 *.dat.h5
 
+# Website
+documentation/docs
+documentation/site
+
 #Keep it clean
 move_zone*
 Results

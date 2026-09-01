@@ -1,0 +1,47 @@
+site_name: The AWEsim User Manual
+repo_name: pyfsi/AWEsim
+repo_url: https://github.com/pyfsi/AWEsim
+edit_uri: ''
+site_url: https://pyfsi.github.io/AWEsim
+site_description: AWEsim - A geometry-resolved aero-servo-elastic framework for airborne wind energy systems
+use_directory_urls: false
+theme:
+  name: 'material'
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.expand
+    - navigation.tracking
+    - toc.integrate
+    - content.code.copy
+    - content.code.annotate
+  favicon: 'assets/images/favicon.ico'
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: 'blue'
+      accent: 'light blue'
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: slate
+      primary: 'blue'
+      accent: 'light blue'
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+  custom_dir: overrides
+markdown_extensions:
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - codehilite
+  - pymdownx.arithmatex
+  - admonition
+  - pymdownx.details
+extra_javascript:
+  - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
+nav:
+  - Introduction: README.md
