@@ -7,8 +7,13 @@
 ## Install CoCoNuT branch AWEsim
 #
 
-cd ~/Software
-git clone --single-branch --branch AWEsim  https://github.com/pyfsi/coconut coconut
+cd ~/Software || exit 1
+
+if [ ! -d "coconut" ]; then
+    git clone --single-branch --branch AWEsim https://github.com/pyfsi/coconut coconut
+else
+    echo "coconut already exists, skipping clone."
+fi
 
 #
 ## Install AWEbox (TODO)
@@ -46,11 +51,14 @@ else
 fi
 
 #
-## Download example (CFD) files from UGent FM cluster
+## Download example (CFD) files from UGent FM cluster and prepare examples
 #
 # TODO: put AWEsim_CM_files on FM (non-personal) account
-cd ~
-scp ../niels/AWEsim_CM_files/cases/case_megawes_maneuvres/simulation* ./Software/AWEsim/cases/case_megawes_maneuvres/SIM_0_rolling_CSD
+mkdir ./AWEsim/cases/case_megawes_maneuvres/SIM_0_rolling_CSD/CFD/
+mkdir ./AWEsim/cases/case_megawes_maneuvres/SIM_0_rolling_CSD/CFD/Results
+mkdir ./AWEsim/cases/case_megawes_maneuvres/SIM_0_rolling_CSD/CFD/Results_debug
+
+scp /cfdfile1/data/fm/niels/AWEsim_CM_files/cases/case_megawes_maneuvres/simulation* ./AWEsim/cases/case_megawes_maneuvres/SIM_0_rolling_CSD/CFD/
 
 
 
