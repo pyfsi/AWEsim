@@ -1,10 +1,10 @@
 # Pumping cycle simulations
 
 ## Prescribed pumping cycle simulations
-To be published.
+Show results AWEC 2026
 
 ## Controlled pumping cycle simulations
-To be published.
+Show Results PhD defense presentation + WESC 2025
 
 ## Fully coupled aero-servo-elastic simulations
 To be developed.
