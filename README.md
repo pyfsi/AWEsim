@@ -1,4 +1,4 @@
-[![AWEsim banner](https://raw.githubusercontent.com/pyfsi/AWEsim/main/docs/images/cover_github.png)](https://github.com/pyfsi/AWEsim)
+[![AWEsim banner](https://raw.githubusercontent.com/pyfsi/AWEsim/main/documentation/images/cover_github.png)](https://github.com/pyfsi/AWEsim)
 
 # The AWEsim Installation Manual
 
@@ -19,25 +19,37 @@ Choose or create a directory (e.g. `Software`) to install AWEsim, move to this d
 
 ```bash
 git clone git@github.com:pyfsi/AWEsim.git
+```
+Make sure your public key is added to you github account. 
+
+The AWEsim project is set up by running `setup_awesim.sh`:
+
+```bash
 cd AWEsim
 chmod +x setup_awesim.sh
 ./setup_awesim.sh
 ```
-Make sure your public key is added to you github account. The AWEsim project is set up by running `setup_awesim.sh`, which takes care off:
+This script takes care off:
 
 - Installing CoCoNuT (branch AWEsim)
-- Installing AWEbox (TODO)
+- Installing AWEbox (TODO) --> from files on cluster; later from GitHub (first test compatibility)
 - Installing mshGen (TODO)
 - Installing python requirements.txt (TODO)
 - Configuring .bashrc
-- Download example (CFD) files from UGent FM cluster
+- Download example (CFD) files from UGent FM cluster 
 
 ## Quick test
 
-## Getting started
+Test the installation by running the examples, the results are desribed in the user manual.
 
-Read The AWEim User Manual (link).
+## Documentation
+
+- Theory: PhD book
+- Practical: The AWEsim User Manual (link).
 
 ## References
+
+- PhD book
+- Aero-servo paper
 
 
