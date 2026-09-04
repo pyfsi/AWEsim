@@ -47,6 +47,8 @@ nav:
   - Introduction: introduction.md 
   - Installation: README.md
   - Overview Code: overview_code.md
+  - PRE-processing: pre_processing.md
   - Flying Maneuvres: flying_maneuvres.md
   - Pumping Cycle Simulations: pumping_cycle_simulations.md
+  - POST-processing: post_processing.md
   - Developer Guide: developer_guide.md
