@@ -15,10 +15,10 @@ from AWEsim.functions.kinematics.rigid_body_motion_fluent import rigid_body_moti
 # File directions
 FILE_DIR = Path(__file__).resolve().parent
 CASE_DIR = FILE_DIR.parent.parent
-SIM_DIR = CASE_DIR / "SIM_0_rolling_CSD"
+SIM_DIR = CASE_DIR / "SIM0_rolling_CSD"
 
 # Settings
-write_SIM = True  # Write SIM files for Fluent simulation
+write_SIM = False  # Write SIM files for Fluent simulation
 print_VWE_dim = False
 
 # Reference dimensions aircraft

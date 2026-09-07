@@ -50,3 +50,13 @@ The AWEsim code consists of five main folders. `📁 aircraft` contains the rele
 To set up and simulate a `📁 case`, preprocessing, simulation, and postprocessing steps are required. The necessary files are gathered in `📁 PRE`, `📁 SIM0`, and `📁 POST`, respectively. `📁 SIM0` contains all files required to launch a simulation. It is recommended to copy this folder to `📁 SIM_testX` (using a useful test description name) before launch, because the folders are modified during the simulation.
 
 A `📁 SIM` folder should contain the necessary aerodynamic case and data files in `📁 CFD`, the files of the structural model in `📁 CSM`, and the dynamics and control-related files in `📁 DYN`. The coupled simulation parameters are configured in `📄 parameters.json`, and the simulation is launched by running `📄 run_simulation.py`. This reflects the same case structure as CoCoNuT.
+
+
+## Changes to CoCoNuT
+`📄 run_simulation.py`. launches coconut
+
+- Check Figure book
+
+## Changes to AWEbox
+
+•	megawes_external_forces.py
