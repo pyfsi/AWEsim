@@ -10,11 +10,23 @@ This can be done using the script `build_maneuvre.py` ; which can be copied from
 
 For example a rolling maneuvre where the control surfaces are deflected once after eachother:
 
+<p style="text-align:center;">
+  <img src="https://raw.githubusercontent.com/pyfsi/AWEsim/main/documentation/images/maneuvre_rolling_CSD.svg"
+       alt="Rolling maneuvre"
+       width="75%" />
+</p>
+
 When flagged, the required filed to run the simulation can be written to the user-defined folder; e.g. `SIM0_rolling_CSD`. Also the required background domain of the VWE can be checked with this script.
 
 
 ## POST-processing
 
+
+<p style="text-align:center;">
+  <img src="https://raw.githubusercontent.com/pyfsi/AWEsim/main/documentation/images/Pressure_rolling.gif"
+       alt="Rolling maneuvre Pressure gif"
+       width="75%" />
+</p>
 ![Rolling maneuvre](https://raw.githubusercontent.com/pyfsi/AWEsim/main/documentation/images/Pressure_rolling.gif)
 
 
