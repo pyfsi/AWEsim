@@ -9,9 +9,9 @@ from AWEsim.functions.aerodynamics.aero_from_SD import force_coefficients_from_s
 # File directions
 FILE_DIR = Path(__file__).resolve().parent
 CASE_DIR = FILE_DIR.parent
-SIM_DIR = CASE_DIR / "SIM_rolling_CSD_test2"
+SIM_DIR = CASE_DIR / "SIM_rolling_CSD"
 
-C = 0 # = 1 if completed, 0 is not completed. TODO:fix
+C = 1 # = 1 if completed, 0 is not completed. TODO:fix
 
 # Reference dimensions aircraft
 b = megawes["wing_span"]
@@ -45,7 +45,7 @@ Cl_SD = np.array([])
 Cm_SD = np.array([])
 Cn_SD = np.array([])
 
-for i in np.arange(len(CFD_coeff[:, 0])):
+for i in np.arange(len(CFD_coeff[:, 0])-1): #TODO was not -1, check if it is correct
     Fx =  CFD_coeff[i, 2] * K
     Fy =  CFD_coeff[i, 3] * K
     Fz =  CFD_coeff[i, 4] * K
