@@ -2,34 +2,27 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 #AWEsim functionalities
-from AWEsim.functions.postprocessing.visuals import (get_cfd_data_all,get_state_data,plot_timestep)
+from AWEsim.functions.postprocessing.visuals import (create_single_visual, create_animation_frames)
 from AWEsim.functions.postprocessing.create_video import create_video
 
 
 # =============================================================================
-# Case settings
-# =============================================================================
-
-SIM_NAME = "SIM_rolling_CSD_test2"
-
-FLOW_PROPERTY = "P"
-VIEW = "I"
-
-
-# =============================================================================
-# Paths
+# Main settings
 # =============================================================================
 
 FILE_DIR = Path(__file__).resolve().parent
 CASE_DIR = FILE_DIR.parent
 
+SIM_NAME = "SIM_rolling_CSD"
 SIM_DIR = CASE_DIR / SIM_NAME
+
+FLOW_PROPERTY = "V"
+VIEW = "B" #TODO: not implemented
 
 RESULTS_DIR = SIM_DIR / "CFD" / "Results"
 STATES_FILE = SIM_DIR / "states.out"
 
 ANIMATION_DIR =  FILE_DIR / "Animations" / "Animation_rolling"
-
 
 # =============================================================================
 # Aircraft components
@@ -63,118 +56,34 @@ VIDEO_NAME = "Pressure.mp4"
 
 
 # =============================================================================
-# Create single visualization
-# =============================================================================
-
-def create_single_visual(timestep):
-    """Create and save one visualization."""
-
-    cfd = get_cfd_data_all(
-        RESULTS_DIR,
-        COMPONENTS,
-        timestep,
-    )
-
-    states = get_state_data(STATES_FILE)
-
-    fig = plot_timestep(
-        timestep,
-        cfd,
-        states,
-        flow_property=FLOW_PROPERTY,
-    )
-
-    filename = (
-        ANIMATION_DIR
-        / f"{FRAME_PREFIX}{timestep:04d}.png"
-    )
-
-    ANIMATION_DIR.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
-
-    fig.savefig(
-        filename,
-        dpi=DPI,
-        bbox_inches="tight",
-    )
-
-    plt.show()
-
-    print(f"Saved: {filename}")
-
-
-# =============================================================================
-# Create animation frames
-# =============================================================================
-
-def create_animation_frames():
-    """Create all PNG frames."""
-
-    ANIMATION_DIR.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
-
-    states = get_state_data(STATES_FILE)
-
-    for timestep in range(START, STOP, STEP):
-
-        print(f"Processing timestep {timestep}...")
-
-        cfd = get_cfd_data_all(
-            RESULTS_DIR,
-            COMPONENTS,
-            timestep,
-        )
-
-        fig = plot_timestep(
-            timestep,
-            cfd,
-            states,
-            flow_property=FLOW_PROPERTY,
-        )
-
-        filename = (
-            ANIMATION_DIR
-            / f"{FRAME_PREFIX}{timestep:04d}.png"
-        )
-
-        fig.savefig(
-            filename,
-            dpi=DPI,
-            bbox_inches="tight",
-        )
-
-        plt.close(fig)
-
-        print(f"Saved: {filename}")
-
-
-# =============================================================================
 # Main
 # =============================================================================
 
-if __name__ == "__main__":
+create_single_visual(
+    timestep=100,
+    RESULTS_DIR=RESULTS_DIR,
+    COMPONENTS=COMPONENTS,
+    STATES_FILE=STATES_FILE,
+    FLOW_PROPERTY=FLOW_PROPERTY,
+    ANIMATION_DIR=ANIMATION_DIR,
+    FRAME_PREFIX=FRAME_PREFIX,
+    DPI=DPI
+)
 
-    # -------------------------------------------------------------------------
-    # Single timestep
-    # -------------------------------------------------------------------------
+create_animation_frames(
+    START=START,
+    STOP=STOP,
+    STEP=STEP,
+    RESULTS_DIR=RESULTS_DIR,
+    COMPONENTS=COMPONENTS,
+    STATES_FILE=STATES_FILE,
+    FLOW_PROPERTY=FLOW_PROPERTY,
+    ANIMATION_DIR=ANIMATION_DIR,
+    FRAME_PREFIX=FRAME_PREFIX,
+    DPI=DPI
+)
 
-    create_single_visual(timestep=50)
-
-    # -------------------------------------------------------------------------
-    # Animation
-    # -------------------------------------------------------------------------
-
-    #create_animation_frames()
-
-    # -------------------------------------------------------------------------
-    # Video
-    # -------------------------------------------------------------------------
-
-    # create_video(
+#create_video(
     #     input_folder=ANIMATION_DIR,
     #     output_file=ANIMATION_DIR / VIDEO_NAME,
     #     prefix=FRAME_PREFIX,

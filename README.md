@@ -5,6 +5,7 @@
 AWEsim is a geometry-resolved aero-servo-elastic simulation framework developed for airborne wind energy (AWE) systems. The aero-servo-elastic coupling algorithms and infrastructure are written in Python and built on top of [CoCoNuT](https://github.com/pyfsi/coconut), a coupling code for numerical tools for efficient partitioned multiphysics simulations, with a focus on fluid-structure interaction (FSI).
 
 The [AWEsim branch on CoCoNuT](https://github.com/pyfsi/coconut/tree/AWEsim) adds the following functionalities:
+
 - Rigid-body motion in the [ANSYS Fluent](https://ansys.synopsys.com/products/fluids/ansys-fluent) solver wrapper
 - Control-surface deflections of aircraft
 - Coupling to the AWE system dynamics and control toolbox [AWEbox]()
@@ -44,7 +45,7 @@ Test the installation by running the examples; the results are described in the 
 
 ## Documentation
 
-- Theory: PhD book
+- Theory: PhD book + errata
 - Practical: The AWEsim User Manual (link).
 
 ## References

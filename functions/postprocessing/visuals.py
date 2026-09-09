@@ -1,6 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+#AWEsim
+from AWEsim.functions.data_exchange import get_cfd_data_all, get_state_data
+
 
 # =============================================================================
 # Plot settings
@@ -12,107 +15,15 @@ PLOT_LIMIT = 15
 
 POINT_SIZE = 5
 
+CMAP = "coolwarm"
+CMAP_pressure = "coolwarm"
+CMAP_velocity = "viridis"
+
 PRESSURE_VMIN = -20
 PRESSURE_VMAX = 9
 
 AXIS_ELEVATION = 30
 AXIS_AZIMUTH = 0
-
-
-# =============================================================================
-# CFD data
-# =============================================================================
-
-def get_cfd_data(filename):
-    """
-    Load CFD surface data from a Fluent export file.
-
-    Parameters
-    ----------
-    filename : str or Path
-        CFD data file.
-
-    Returns
-    -------
-    dict
-        CFD data.
-    """
-
-    data = np.genfromtxt(
-        filename,
-        delimiter=",",
-        skip_header=1,
-    )
-
-    return {
-        "x": data[:, 1],
-        "y": data[:, 2],
-        "z": data[:, 3],
-        "pressure": data[:, 4],
-        "cp": data[:, 5],
-        "velocity": data[:, 6],
-        "vx": data[:, 7],
-        "vy": data[:, 8],
-        "vz": data[:, 9],
-        "shear": data[:, 10],
-        "shear_x": data[:, 11],
-        "shear_y": data[:, 12],
-        "shear_z": data[:, 13],
-    }
-
-
-def get_cfd_data_all(results_dir, components, timestep):
-    """
-    Load and combine CFD data for all aircraft components.
-    """
-
-    component_data = []
-
-    for component in components:
-
-        filename = (
-            results_dir
-            / f"data_{component}-{timestep:04d}"
-        )
-
-        component_data.append(
-            get_cfd_data(filename)
-        )
-
-    data = {}
-
-    for variable in component_data[0]:
-
-        data[variable] = np.concatenate(
-            [
-                component[variable]
-                for component in component_data
-            ]
-        )
-
-    return data
-
-
-# =============================================================================
-# State data
-# =============================================================================
-
-def get_state_data(filename):
-    """
-    Load aircraft state data.
-    """
-
-    states = np.genfromtxt(
-        filename,
-        delimiter=",",
-    )
-
-    return {
-        "time": states[:, 0],
-        "position": states[:, 1:4],
-        "velocity": states[:, 4:7],
-        "rotation": states[:, 10:19].reshape(-1, 3, 3),
-    }
 
 
 # =============================================================================
@@ -146,73 +57,33 @@ def create_3d_axis():
 # Plot flow property
 # =============================================================================
 
-def plot_flow_property(
-    ax,
-    cfd,
-    x,
-    y,
-    z,
-    flow_property,
-):
+def plot_flow_property(ax, cfd, x, y, z, flow_property):
+
     """Plot the selected CFD flow property."""
+
+    #TODO: replace x,y,x with points
 
     if flow_property == "P":
 
         values = cfd["pressure"] / 1000
 
-        return ax.scatter(
-            x,
-            y,
-            z,
-            c=values,
-            s=POINT_SIZE,
-            cmap="coolwarm",
-            vmin=PRESSURE_VMIN,
-            vmax=PRESSURE_VMAX,
-        )
+        return ax.scatter(x, y, z, c=values, s=POINT_SIZE, cmap=CMAP_pressure, vmin=PRESSURE_VMIN,  vmax=PRESSURE_VMAX)
 
     if flow_property == "CP":
 
-        return ax.scatter(
-            x,
-            y,
-            z,
-            c=cfd["cp"],
-            s=POINT_SIZE,
-            cmap="coolwarm",
-        )
+        return ax.scatter(x, y, z, c=cfd["cp"], s=POINT_SIZE,  cmap= CMAP_pressure)
 
     if flow_property == "V":
 
-        return ax.scatter(
-            x,
-            y,
-            z,
-            c=cfd["velocity"],
-            s=POINT_SIZE,
-            cmap="viridis",
-        )
+        return ax.scatter(x, y, z, c=cfd["velocity"],  s=POINT_SIZE, cmap=CMAP_velocity)
 
     if flow_property == "F":
 
-        return ax.scatter(
-            x,
-            y,
-            z,
-            c=cfd["shear"],
-            s=POINT_SIZE,
-            cmap="viridis",
-        )
+        return ax.scatter(x, y, z, c=cfd["shear"], s=POINT_SIZE, cmap=CMAP_velocity)
 
     if flow_property == "N":
 
-        return ax.scatter(
-            x,
-            y,
-            z,
-            color="grey",
-            s=POINT_SIZE,
-        )
+        return ax.scatter(x, y, z, color="grey", s=POINT_SIZE)
 
     raise ValueError(
         f"Unknown flow property: {flow_property}"
@@ -223,12 +94,7 @@ def plot_flow_property(
 # Main plotting function
 # =============================================================================
 
-def plot_timestep(
-    timestep,
-    cfd,
-    states,
-    flow_property="P",
-):
+def plot_timestep(timestep, cfd, states, flow_property= "P"):
     """
     Create a 3D visualization for one timestep.
 
@@ -249,7 +115,7 @@ def plot_timestep(
         Generated figure.
     """
 
-    i = timestep - 1
+    i = timestep - 1 #TODO: check if this is correct
 
     position = states["position"][i]
 
@@ -262,50 +128,67 @@ def plot_timestep(
     fig, ax = create_3d_axis()
 
     # Plot flow property
-    plot_flow_property(
-        ax,
-        cfd,
-        x,
-        y,
-        z,
-        flow_property,
-    )
+    plot_flow_property(ax, cfd, x, y, z, flow_property)
 
-    # -------------------------------------------------------------------------
     # Aircraft trajectory
-    # -------------------------------------------------------------------------
-
     trajectory = states["position"] - position
 
-    ax.plot(
-        trajectory[:, 0],
-        trajectory[:, 1],
-        trajectory[:, 2],
-        linestyle="dotted",
-        color="grey",
-    )
+    ax.plot(trajectory[:, 0], trajectory[:, 1], trajectory[:, 2],linestyle="dotted", color="grey")
+    ax.plot(trajectory[:timestep, 0], trajectory[:timestep, 1], trajectory[:timestep, 2], color="purple")
 
-    ax.plot(
-        trajectory[:timestep, 0],
-        trajectory[:timestep, 1],
-        trajectory[:timestep, 2],
-        color="purple",
-    )
 
-    # -------------------------------------------------------------------------
     # Time
-    # -------------------------------------------------------------------------
-
     time = states["time"][i]
 
-    ax.text2D(
-        0.05,
-        0.95,
-        f"Time = {time:.2f} s",
-        fontsize=12,
-        transform=ax.transAxes,
-    )
+    ax.text2D(0.05, 0.95, f"Time = {time:.2f} s", fontsize=12, transform=ax.transAxes)
 
     plt.tight_layout()
 
     return fig
+
+# =============================================================================
+# Create single visualization
+# =============================================================================
+
+def create_single_visual(timestep, RESULTS_DIR, COMPONENTS, STATES_FILE, FLOW_PROPERTY, ANIMATION_DIR, FRAME_PREFIX, DPI,PLOT = True):
+    """Create and save one visualization."""
+
+    #Get state and CFD data
+    states = get_state_data(STATES_FILE)
+    cfd_data = get_cfd_data_all(RESULTS_DIR, COMPONENTS, timestep)
+
+    #Plot the timestep
+    fig = plot_timestep(timestep,cfd_data, states, flow_property=FLOW_PROPERTY)
+
+    #Save and show the figure
+    ANIMATION_DIR.mkdir(parents=True, exist_ok=True)
+    filename = (ANIMATION_DIR / f"{FRAME_PREFIX}{timestep:04d}.png")
+    fig.savefig(filename, dpi=DPI, bbox_inches="tight")
+    print(f"Saved: {filename}")
+    if PLOT:
+        plt.show()
+
+# =============================================================================
+# Create animation frames
+# =============================================================================
+
+def create_animation_frames( START, STOP, STEP, RESULTS_DIR, COMPONENTS, STATES_FILE, FLOW_PROPERTY, ANIMATION_DIR, FRAME_PREFIX, DPI):
+    """Create all PNG frames."""
+
+    for timestep in range(START, STOP, STEP):
+
+        print(f"Processing timestep {timestep}...")
+
+        create_single_visual(
+            timestep=timestep,
+            RESULTS_DIR=RESULTS_DIR,
+            COMPONENTS=COMPONENTS,
+            STATES_FILE=STATES_FILE,
+            FLOW_PROPERTY=FLOW_PROPERTY,
+            ANIMATION_DIR=ANIMATION_DIR,
+            FRAME_PREFIX=FRAME_PREFIX,
+            DPI=DPI,
+            PLOT = False
+        )
+
+

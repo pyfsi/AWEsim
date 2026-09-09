@@ -85,3 +85,23 @@ def dcm_to_euler(R):
     psi = np.arctan2(R[1, 0], R[0, 0])
 
     return phi, theta, psi
+
+
+# =============================================================================
+# Rotation matrices for roll, pitch, and yaw
+# =============================================================================
+
+def Rx(theta):
+    return np.array([[ 1, 0           , 0           ],
+                      [ 0, m.cos(theta),-m.sin(theta)],
+                      [ 0, m.sin(theta), m.cos(theta)]])
+
+def Ry(theta):
+    return np.array([[ m.cos(theta), 0, m.sin(theta)],
+                      [ 0           , 1, 0           ],
+                      [-m.sin(theta), 0, m.cos(theta)]])
+
+def Rz(theta):
+    return np.array([[ m.cos(theta), -m.sin(theta), 0 ],
+                      [ m.sin(theta), m.cos(theta) , 0 ],
+                      [ 0           , 0            , 1 ]])

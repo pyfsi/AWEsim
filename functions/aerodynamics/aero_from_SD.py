@@ -217,5 +217,37 @@ def moment_coefficients_from_states(Va, alpha,beta,p, q, r, da, de, dr):
     
     return Cm_tot, Cm_angles, Cm_rot, Cm_CS, Cm_alpha, Cm_beta, Cm_p, Cm_q, Cm_r,Cm_CSda ,Cm_CSde, Cm_CSdr
 
+# =============================================================================
+# Stability-derivative reconstruction
+# =============================================================================
 
+def compute_sd_coefficients(maneuvre, n_samples):
+    """
+    Reconstruct force and moment coefficients using the stability-derivative
+    aerodynamic model.
+
+    Returns
+    -------
+    force_coeff_sd : ndarray, shape (N, 3)
+        Reconstructed [Cx, Cy, Cz].
+
+    moment_coeff_sd : ndarray, shape (N, 3)
+        Reconstructed [Cl, Cm, Cn].
+    """
+
+    force_coeff_sd = np.zeros((n_samples, 3))
+    moment_coeff_sd = np.zeros((n_samples, 3))
+
+    for i in range(n_samples):
+
+        Va, alpha, beta, p, q, r, delta_a, delta_e, delta_r = maneuvre[i, 1:10]
+
+        force_result = force_coefficients_from_states(Va, alpha, beta, p,  q,  r, delta_a, delta_e, delta_r) #TODO: Violates clean code; too many arguments
+        moment_result = moment_coefficients_from_states(Va, alpha, beta, p, q, r, delta_a, delta_e, delta_r)
+
+        # First returned item is the total coefficient vector
+        force_coeff_sd[i] = force_result[0]
+        moment_coeff_sd[i] = moment_result[0]
+
+    return force_coeff_sd, moment_coeff_sd
 

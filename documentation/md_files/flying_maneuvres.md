@@ -42,7 +42,7 @@ Launch the simulation with `python run_simulation.py`. This launches the CoCoNuT
 
 The AWEsim code provides scripts to post-process the data and visualize the results of the simulation.
 
-`plot_maneuvre.py` can be used to plot the resulting forces and moments of the simulation:
+`plot_results.py` can be used to plot the resulting forces and moments of the simulation:
 
 <p style="text-align:center;">
   <img src="https://raw.githubusercontent.com/pyfsi/AWEsim/main/documentation/images/maneuvre_rolling_CSD_forces.svg"

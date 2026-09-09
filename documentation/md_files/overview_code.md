@@ -1,4 +1,6 @@
-# Code Structure
+# Overview code
+
+## Code Structure
 
 The AWEsim code provides the necessary scripts to fly prescribed maneuvers and pumping-cycle simulations in a CFD environment, including aeroelastic coupling. The code also relies on external software such as CoCoNuT, mshGen, and AWEbox. It is recommended to install AWEsim in a folder such as `📁 Software` together with these external tools. This is taken into account by `📄 setup_awesim.sh`.
 
@@ -60,3 +62,5 @@ A `📁 SIM` folder should contain the necessary aerodynamic case and data files
 ## Changes to AWEbox
 
 •	megawes_external_forces.py
+
+## AWEsim functions
