@@ -18,6 +18,7 @@ documentation/site
 #Keep it clean
 move_zone*
 Results
+cases/*/POST/Animations/Animation*/*.png
 
 #simulation folders; use SIM0 for initialization folder
 SIM_* 
