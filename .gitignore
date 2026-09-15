@@ -1,15 +1,18 @@
 # Still to be added
-cases/case_megawes_1loop_12mps
 cases/case_megawes_2loop_20mps
 cases/case_megawes_maneuvres/SIM_test_main2/
 cases/case_megawes_maneuvres/SIM_test_rates2/
 
-# ANSYS Fluent generated files --> Put on Zenodo
+cases/case_megawes_1loop_12mps/POST*
+cases/case_megawes_1loop_12mps/PRE*
+
+# Large files --> AWEsim_largefiles
 *.msh
 *.cas
 *.cas.h5
 *.dat
 *.dat.h5
+cases/case_megawes_1loop_12mps/SIM0/AWEbox/Flight_path/mpc_solver.c
 
 # Website
 documentation/docs

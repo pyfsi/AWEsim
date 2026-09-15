@@ -1,0 +1,22 @@
+# linking to ../../src/ABL_koSST.c in lnamd64/3ddp_host
+# building library in lnamd64/3ddp_host
+
+# Generating udf_names.c because of makefile ABL_koSST.c
+# Compiling udf_names.o because of udf_names.c
+# Compiling ABL_koSST.o because of ABL_koSST.c
+ABL_koSST.c: In function ‘Parente_Benocci’:
+ABL_koSST.c:100:10: warning: ‘wf_value’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+   return wf_value;
+          ^~~~~~~~
+# Linking libudf.so because of makefile user.udf udf_names.c udf_names.o ABL_koSST.o
+# linking to ../../src/ABL_koSST.c in lnamd64/3ddp_node
+# building library in lnamd64/3ddp_node
+
+# Generating udf_names.c because of makefile ABL_koSST.c
+# Compiling udf_names.o because of udf_names.c
+# Compiling ABL_koSST.o because of ABL_koSST.c
+ABL_koSST.c: In function ‘Parente_Benocci’:
+ABL_koSST.c:100:10: warning: ‘wf_value’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+   return wf_value;
+          ^~~~~~~~
+# Linking libudf.so because of makefile user.udf udf_names.c udf_names.o ABL_koSST.o
