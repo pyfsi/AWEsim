@@ -14,7 +14,7 @@ from AWEsim.functions.postprocessing.plotting import plot_aerodynamic_coefficien
 
 FILE_DIR = Path(__file__).resolve().parent
 CASE_DIR = FILE_DIR.parent
-SIM_DIR = CASE_DIR / "SIM_rolling_CSD"
+SIM_DIR = CASE_DIR / "SIM_rolling_CSD_test"
 
 # =============================================================================
 # Main

@@ -23,9 +23,10 @@ git clone git@github.com:pyfsi/AWEsim.git
 ```
 Make sure your public key has been added to your GitHub account.
 
-The AWEsim project is set up by running `setup_awesim.sh`:
+The AWEsim project is set up by running `setup_awesim.sh` on a calculation cluster:
 
 ```bash
+ssh cfdcluXX
 cd AWEsim
 chmod +x setup_awesim.sh
 ./setup_awesim.sh
@@ -33,9 +34,8 @@ chmod +x setup_awesim.sh
 This script takes care of:
 
 - Installing CoCoNuT (branch AWEsim)
-- Installing AWEbox (TODO) --> from files on the cluster; later from GitHub (first test compatibility)
+- Installing AWEbox and Python requirements.txt 
 - Installing mshGen (TODO)
-- Installing Python requirements.txt (TODO)
 - Configuring `.bashrc`
 - Downloading example (CFD) files from the UGent FM cluster
 
