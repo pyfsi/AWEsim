@@ -85,9 +85,7 @@ def plot_flow_property(ax, cfd, x, y, z, flow_property):
 
         return ax.scatter(x, y, z, color="grey", s=POINT_SIZE)
 
-    raise ValueError(
-        f"Unknown flow property: {flow_property}"
-    )
+    raise ValueError(f"Unknown flow property: {flow_property}")
 
 
 # =============================================================================
