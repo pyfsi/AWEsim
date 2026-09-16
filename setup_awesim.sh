@@ -35,10 +35,13 @@ if [ ! -d "awebox" ]; then
     
     scp /cfdfile1/data/fm/niels/AWEsim_largefiles/awebox/awebox.zip $SOFTWAREPATH
     scp /cfdfile1/data/fm/niels/AWEsim_largefiles/awebox/hsl.zip $SOFTWAREPATH
+    scp /cfdfile1/data/fm/niels/AWEsim_largefiles/awebox/casadi.zip $SOFTWAREPATH/tools
 
     unzip awebox.zip
     unzip hsl.zip
+    unzip tools/casadi.zip -d tools
 
+    # hsl installation and compilation (coinhsl + metis)
     cd hsl
     tar -xvzf coinhsl-2021.05.05.tar.gz
     tar -xvzf metis-4.0.3.tar.gz
@@ -54,7 +57,7 @@ if [ ! -d "awebox" ]; then
     ./compile_libcoinhsl.sh
 
     cd ../..
-    ln -s $SOFTWAREPATH/hsl/coinhsl-2021.05.05/lib/libcoinhsl.so $SOFTWAREPATH/tools/casadi/libhsl.so
+    ln -s $SOFTWAREPATH/hsl/coinhsl-2021.05.05/lib/libcoinhsl.so $SOFTWAREPATH/tools/casadi/casadi/libhsl.so
 
     cd ~/Software
     mv hsl ./tools/
@@ -95,15 +98,12 @@ module load ScaLAPACK/2.0.2-gompi-2019a-OpenBLAS-0.3.5
 
 # Required path variables
 export PYTHONPATH=$PYTHONPATH:$HOME/Software/awebox
-export PYTHONPATH=$PYTHONPATH:$HOME/Software/tools
 export PYTHONPATH=$PYTHONPATH:$HOME/Software/tools/casadi
-export CASADIPATH=$HOME/Software/tools/casadi
 export CASADIPATH=$HOME/Software/tools/casadi/casadi
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CASADIPATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/Software/tools/hsl/coinhsl-2021.05.05/lib
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/Software/tools/hsl/coinhsl-2021.05.05/metis-4.0.3/Lib
 }
-
 # --- End AWEsim environment settings ---
 
 EOF
@@ -122,6 +122,15 @@ fi
 
 cd ~/Software
 
+# Case pumping cycle 1loop 12mps wind
+mkdir ./AWEsim/cases/case_megawes_1loop_12mps/SIM0/CFD/
+mkdir ./AWEsim/cases/case_megawes_1loop_12mps/SIM0/CFD/Results
+mkdir ./AWEsim/cases/case_megawes_1loop_12mps/SIM0/CFD/Results_debug
+
+scp /cfdfile1/data/fm/niels/AWEsim_largefiles/cases/case_megawes_1loop_12mps/simulation* ./AWEsim/cases/case_megawes_1loop_12mps/SIM0/CFD/
+scp /cfdfile1/data/fm/niels/AWEsim_largefiles/cases/case_megawes_1loop_12mps/mpc_solver.c ./AWEsim/cases/case_megawes_1loop_12mps/SIM0/AWEbox/Flight_path/
+
+# Case megawes_maneuvres
 mkdir ./AWEsim/cases/case_megawes_maneuvres/SIM0_rolling_CSD/CFD/
 mkdir ./AWEsim/cases/case_megawes_maneuvres/SIM0_rolling_CSD/CFD/Results
 mkdir ./AWEsim/cases/case_megawes_maneuvres/SIM0_rolling_CSD/CFD/Results_debug
