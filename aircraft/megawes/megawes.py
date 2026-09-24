@@ -1,4 +1,5 @@
 megawes = {
+    "mass": 6885.2,             # [kg]
     "wing_span": 42.47,        # [m]
     "reference_chord": 3.5425,    # [m]
     "reference_area": 150.45,     # [m²]

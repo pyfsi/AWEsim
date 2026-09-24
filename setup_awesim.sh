@@ -60,7 +60,7 @@ if [ ! -d "awebox" ]; then
     ln -s $SOFTWAREPATH/hsl/coinhsl-2021.05.05/lib/libcoinhsl.so $SOFTWAREPATH/tools/casadi/casadi/libhsl.so
 
     cd ~/Software
-    mv hsl ./tools/
+    mv hsl ./tools/ #TODO: check if this move is allowed; see ln -s ... above
     rm awebox.zip
     rm hsl.zip
 

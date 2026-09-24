@@ -1,4 +1,7 @@
+from tkinter.font import names
+
 import numpy as np
+import csv
 
 
 # =============================================================================
@@ -13,6 +16,50 @@ def load_simulation_data(sim_dir):
     cfd_coeff = np.genfromtxt(sim_dir / "CFD" / "force_coefficients.out", skip_header=3) 
 
     return states, maneuvre, cfd_coeff
+
+def load_simulation_data_pumping(sim_dir):
+    """Load the reference trajectory and AWEsim simulation outputs.
+
+    Returns
+    -------
+    reference, states, controls, forces_mpc, forces_cfd : dict
+        Each dictionary contains named NumPy arrays. Tether length, speed,
+        and acceleration are scaled by 500, as in the original code.
+    """
+
+    awebox_dir = sim_dir / "AWEbox"
+    reference_file = awebox_dir / "Flight_path" / "megawes_optimised_path_cfd.csv" #TODO: not hardcoded
+    if not reference_file.is_file():
+        raise FileNotFoundError(f"Reference trajectory is missing: {reference_file}")
+    reference = csv2dict(str(reference_file))
+
+    def read_columns(filename, names):
+        data = np.genfromtxt(awebox_dir / filename, delimiter=",", ndmin=2)
+        if np.isnan(data[:, -1]).all():
+            data = data[:, :-1]
+        if data.shape[1] != len(names):
+            raise ValueError(
+                f"{filename}: expected {len(names)} columns, got {data.shape[1]}"
+            )
+        return dict(zip(names, data.T))
+
+    state_columns = (
+        "time q10_x q10_y q10_z dq10_vx dq10_vy dq10_vz "
+        "omega10_x omega10_y omega10_z "
+        "r10_1 r10_2 r10_3 r10_4 r10_5 r10_6 r10_7 r10_8 r10_9 "
+        "delta10_da delta10_de delta10_dr l_t dl_t "
+        "ddelta10_da ddelta10_de ddelta10_dr ddl_t"
+    ).split()
+    states = read_columns("states_controls.out", state_columns)
+
+    for name in ("l_t", "dl_t", "ddl_t"):
+        states[name] *= 500 #TODO: avoid hardcoding scaling factor
+
+    force_columns = "time Fx Fy Fz Mx My Mz".split()
+    forces_mpc = read_columns("forces_MPC.out", force_columns)
+    forces_cfd = read_columns("forces_CFD.out", force_columns)
+
+    return reference, states, forces_mpc, forces_cfd
 
 # =============================================================================
 # State data
