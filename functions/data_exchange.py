@@ -25,6 +25,8 @@ def load_simulation_data_pumping(sim_dir):
     reference, states, controls, forces_mpc, forces_cfd : dict
         Each dictionary contains named NumPy arrays. Tether length, speed,
         and acceleration are scaled by 500, as in the original code.
+
+    TODO: Forces are in earth frame, and moments are in body frame. 
     """
 
     awebox_dir = sim_dir / "AWEbox"

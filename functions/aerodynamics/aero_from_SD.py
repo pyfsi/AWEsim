@@ -17,6 +17,8 @@ import math as m
 from scipy import interpolate
 from pathlib import Path
 
+from functions.postprocessing.compute import calculate_aerodynamic_properties
+
 HERE = Path(__file__).resolve().parent
 
 #%% functions
@@ -251,3 +253,61 @@ def compute_sd_coefficients(maneuvre, n_samples):
 
     return force_coeff_sd, moment_coeff_sd
 
+def reconstruct_body_coefficients(states):
+    """Reconstruct SD force and moment coefficients for every state sample."""
+    terms = (
+        "total", "angles", "rotation", "control_surfaces",
+        "alpha", "beta", "p", "q", "r",
+        "aileron", "elevator", "rudder",
+    )
+
+    aero = calculate_aerodynamic_properties(states)
+    
+    time = np.asarray(states["time"], dtype=float)
+    n = len(time)
+
+    def values(data, key):
+        array = np.asarray(data[key], dtype=float)
+        if array.shape != (n,):
+            raise ValueError(f"{key!r} must contain {n} samples")
+        return array
+
+    airspeed = values(aero, "Va")
+    alpha = np.deg2rad(values(aero, "alpha"))
+    beta = -np.deg2rad(values(aero, "beta")) #TODO: remove negation once beta is corrected in the state data
+
+    omega_x = values(states, "omega10_x")
+    omega_y = values(states, "omega10_y")
+    omega_z = values(states, "omega10_z")
+
+    delta_a = values(states, "delta10_da")
+    delta_e = values(states, "delta10_de")
+    delta_r = values(states, "delta10_dr")
+
+    force = {term: np.empty((n, 3)) for term in terms}
+    moment = {term: np.empty((n, 3)) for term in terms}
+
+    for i in range(n):
+        arguments = (
+            airspeed[i], alpha[i], beta[i],
+            omega_x[i], omega_y[i], omega_z[i],
+            delta_a[i], delta_e[i], delta_r[i],
+        )
+
+        force_parts = force_coefficients_from_states(*arguments)
+        moment_parts = moment_coefficients_from_states(*arguments)
+
+        if len(force_parts) != len(terms) or len(moment_parts) != len(terms):
+            raise ValueError("SD coefficient functions returned an unexpected number of terms")
+
+        for term, force_part, moment_part in zip(
+            terms, force_parts, moment_parts
+        ):
+            force[term][i] = np.asarray(force_part, dtype=float).reshape(3)
+            moment[term][i] = np.asarray(moment_part, dtype=float).reshape(3)
+
+    return {
+        "time": time,
+        "force": force,
+        "moment": moment,
+    }

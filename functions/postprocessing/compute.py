@@ -162,11 +162,222 @@ def compute_tether_force(acceleration, aerodynamic_force):
     return tether_force
 
 
+# =============================================================================
+# Aerodynamics
+# =============================================================================
 
-    """Compute instantaneous tether power given tension and reel speed.
 
-    `tension` has length N; `reel_speed` has length N+1 (state length)
-    so `reel_speed[:-1]` is used to align with forward-differenced samples.
+def calculate_aerodynamic_properties(
+    states,
+    *,
+    area=150.45,
+    span=42.47,
+    dynamic_viscosity=1.81e-5,
+    friction_velocity=0.3828883453000257,
+    kappa=0.4187,
+    roughness=0.0002,
+):
+    """Return airspeed, Reynolds number, alpha, beta, and supporting arrays.
+
+    Assumes the DCM rows map earth-frame vectors into the body frame.
+    Alpha and beta use the same Vz/Vx and Vy/Vx sign convention as the
+    original script, with atan replacing the small-angle approximation.
     """
+    time = np.asarray(states["time"], dtype=float)
+    n = len(time)
 
-    return tension * reel_speed[:-1]
+    def get_state(name):
+        values = np.asarray(states[name], dtype=float)
+        if values.shape != (n,):
+            raise ValueError(f"states[{name!r}] must contain {n} values")
+        return values
+
+    altitude = get_state("q10_z")
+    if np.any(altitude + roughness <= 0):
+        raise ValueError("Altitude is outside the logarithmic wind profile")
+
+    rotation = np.stack(
+        [get_state(f"r10_{i}") for i in range(1, 10)], axis=1
+    ).reshape(n, 3, 3)
+
+    velocity_earth = np.column_stack([
+        get_state("dq10_vx"),
+        get_state("dq10_vy"),
+        get_state("dq10_vz"),
+    ])
+
+    wind_speed = (
+        friction_velocity / kappa
+        * np.log((altitude + roughness) / roughness)
+    )
+    air_velocity_earth = velocity_earth.copy()
+    air_velocity_earth[:, 0] -= wind_speed
+    air_velocity_body = np.einsum(
+        "nij,nj->ni", rotation, air_velocity_earth
+    )
+
+    airspeed = np.linalg.norm(air_velocity_body, axis=1)
+    if np.any(airspeed <= 0):
+        raise ValueError("Airspeed must be greater than zero")
+
+    vx, vy, vz = air_velocity_body.T
+
+    # Principal angles: equivalent to arctan(Vz/Vx) and arctan(Vy/Vx),
+    # including when Vx is negative.
+    alpha = np.degrees(np.arctan2(vz * np.sign(vx), np.abs(vx)))
+    beta = np.degrees(np.arctan2(vy * np.sign(vx), np.abs(vx)))
+
+    chord = area / span
+    reynolds = 1.225 * airspeed * chord / dynamic_viscosity #TODO: hardcoded density
+
+    return {
+        "time": time,
+        "Va": airspeed,               # m/s
+        "Re": reynolds,               # based on area / span
+        "alpha": alpha,               # degrees
+        "beta": beta,                 # degrees
+        "chord": chord,               # m
+        "rotation": rotation,         # earth -> body
+        "air_velocity_body": air_velocity_body,
+    }
+
+
+def calculate_body_coefficients(
+    reference,
+    states,
+    forces,
+    *,
+    properties=None,
+    area=150.45,
+    span=42.47,
+):
+    """Return body-frame force and moment coefficients for one force dataset."""
+    if properties is None:
+        properties = calculate_aerodynamic_properties(
+            reference, states, area=area, span=span
+        )
+
+    time = properties["time"]
+    force_time = np.asarray(forces["time"], dtype=float)
+    if time[0] < force_time[0] or time[-1] > force_time[-1]:
+        raise ValueError("Force data do not cover all state timestamps")
+
+    def interpolate_vectors(names):
+        return np.column_stack([
+            np.interp(time, force_time, np.asarray(forces[name], dtype=float))
+            for name in names
+        ])
+
+    rotation = properties["rotation"]
+    force_earth = interpolate_vectors(("Fx", "Fy", "Fz"))
+    force_body = np.einsum(
+        "nij,nj->ni", rotation,
+        force_earth,
+    )
+
+    # Moments are already expressed in the body frame in the force data.
+    moment_body = interpolate_vectors(("Mx", "My", "Mz"))
+
+    denominator = 0.5 * 1.225 * properties["Va"]**2 * area #TODO: hardcoded density 
+    cx, cy, cz = (force_body / denominator[:, None]).T
+    cmx, cmy, cmz = (
+        moment_body
+        / (denominator[:, None] * np.array([
+            span, properties["chord"], span
+        ]))
+    ).T
+
+    return {
+        "time": time,
+        "Cx": cx, "Cy": cy, "Cz": cz,
+        "Cmx": cmx, "Cmy": cmy, "Cmz": cmz,
+        "force_body": force_body,
+        "moment_body": moment_body,
+    }
+
+
+def calculate_lift_drag_coefficients(
+    reference,
+    states,
+    forces,
+    *,
+    properties=None,
+    body_coefficients=None,
+    area=150.45,
+    span=42.47,
+):
+    """Return drag, side-force, and lift coefficients in wind axes."""
+    if properties is None:
+        properties = calculate_aerodynamic_properties(
+            reference, states, area=area, span=span
+        )
+    if body_coefficients is None:
+        body_coefficients = calculate_body_coefficients(
+            reference, states, forces,
+            properties=properties, area=area, span=span,
+        )
+
+    # Drag points opposite the aircraft velocity relative to the air.
+    velocity_direction = (
+        properties["air_velocity_body"] / properties["Va"][:, None]
+    )
+    drag_direction = -velocity_direction
+
+    # Choose lift as the direction closest to positive body z while
+    # perpendicular to the relative velocity.
+    body_up = np.array([0.0, 0.0, 1.0])
+    lift_direction = (
+        body_up
+        - np.sum(body_up * velocity_direction, axis=1)[:, None]
+        * velocity_direction
+    )
+    lift_norm = np.linalg.norm(lift_direction, axis=1)
+    if np.any(lift_norm < 1e-12):
+        raise ValueError("Lift direction is undefined for vertical flight")
+    lift_direction /= lift_norm[:, None]
+
+    # Complete the orthogonal wind-axis basis.
+    side_direction = np.cross(lift_direction, drag_direction)
+
+    force_body = body_coefficients["force_body"]
+    denominator = 0.5 * 1.225 * properties["Va"]**2 * area #TODO: hardcoded density
+
+    return {
+        "time": properties["time"],
+        "CD": np.sum(force_body * drag_direction, axis=1) / denominator,
+        "CY": np.sum(force_body * side_direction, axis=1) / denominator,
+        "CL": np.sum(force_body * lift_direction, axis=1) / denominator,
+    }
+
+def calculate_reference_body_coefficients(reference, *, area=150.45, span=42.47):
+    """Calculate reference force and moment coefficients in body axes."""
+    time = np.asarray(reference["time"], dtype=float)
+    airspeed = np.asarray(
+        reference["outputs_aerodynamics_airspeed1_0"], dtype=float
+    )
+    density = np.mean(
+        np.asarray(reference["outputs_aerodynamics_air_density1_0"], dtype=float)
+    )
+
+    q_area = 0.5 * density * airspeed**2 * area
+    if np.any(q_area == 0):
+        raise ValueError("Reference coefficients are undefined at zero airspeed")
+
+    chord = area / span
+    result = {"time": time}
+
+    for i, axis in enumerate("xyz"):
+        force = np.asarray(
+            reference[f"outputs_aerodynamics_f_aero_body1_{i}"],
+            dtype=float,
+        )
+        moment = np.asarray(
+            reference[f"outputs_aerodynamics_m_aero_body1_{i}"],
+            dtype=float,
+        )
+        moment_length = chord if axis == "y" else span
+
+        result[f"C{axis}"] = force / q_area
+        result[f"Cm{axis}"] = moment / (q_area * moment_length)
+
+    return result
