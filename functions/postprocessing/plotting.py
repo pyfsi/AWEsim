@@ -20,9 +20,15 @@ plt.rc("font", **font)
 # Plot aerodynamic coefficients
 # =============================================================================
 
-def plot_aerodynamic_coefficients(time, force_coeff, moment_coeff, force_coeff_sd, moment_coeff_sd):
-    
-    """Plot CFD and stability-derivative force/moment coefficients."""
+def plot_aerodynamic_coefficients(time, force_coeff, moment_coeff, force_coeff_sd, moment_coeff_sd,
+                                  xlim=None, ylims=None):
+
+    """Plot CFD and stability-derivative force/moment coefficients.
+
+    Optional xlim is applied to all subplots. Optional ylims is a 3x2 nested
+    list of (ymin, ymax) tuples matching the subplot grid
+    [[Cx, Cl], [Cy, Cm], [Cz, Cn]] and overrides the default limits.
+    """
 
     fig, axs = plt.subplots(3, 2, figsize=(10, 8), sharex=True)
 
@@ -54,6 +60,13 @@ def plot_aerodynamic_coefficients(time, force_coeff, moment_coeff, force_coeff_s
 
         if ylim is not None:
             ax.set_ylim(ylim)
+
+    for i in range(3):
+        for j in range(2):
+            if xlim is not None:
+                axs[i, j].set_xlim(*xlim)
+            if ylims is not None:
+                axs[i, j].set_ylim(*ylims[i][j])
 
     axs[2, 0].set_xlabel("Time [s]")
     axs[2, 1].set_xlabel("Time [s]")

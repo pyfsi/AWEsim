@@ -2,8 +2,10 @@
 cases/case_megawes_2loop_20mps
 cases/case_megawes_maneuvres/SIM_test_main2/
 cases/case_megawes_maneuvres/SIM_test_rates2/
-
 cases/case_megawes_1loop_12mps/PRE*
+POST_declutter*
+POST_New
+
 
 # Large files --> AWEsim_largefiles
 *.msh
@@ -23,7 +25,7 @@ Results
 cases/*/POST/Animations/Animation*/*.png
 
 #simulation folders; use SIM0 for initialization folder
-SIM_* 
+SIM_*
 
 # Python
 __pycache__/

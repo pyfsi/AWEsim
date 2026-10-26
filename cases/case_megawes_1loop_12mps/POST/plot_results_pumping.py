@@ -15,7 +15,7 @@ from AWEsim.functions.postprocessing.plotting import *
 
 FILE_DIR = Path(__file__).resolve().parent
 CASE_DIR = FILE_DIR.parent
-SIM_DIR = CASE_DIR / "SIM_test"
+SIM_DIR = CASE_DIR / "SIM_Interiorflow"
 
 # =============================================================================
 # Load simulation data
@@ -29,7 +29,6 @@ reference, states, forces_mpc, forces_cfd = load_simulation_data_pumping(SIM_DIR
 
 tether_tension = calculate_tether_tension(states, forces_cfd)
 power = calculate_power(states, forces_cfd)
-
 
 aero = calculate_aerodynamic_properties(states)
 

@@ -14,7 +14,7 @@ from AWEsim.functions.postprocessing.plotting import plot_aerodynamic_coefficien
 
 FILE_DIR = Path(__file__).resolve().parent
 CASE_DIR = FILE_DIR.parent
-SIM_DIR = CASE_DIR / "SIM_rolling_CSD_test"
+SIM_DIR = CASE_DIR / "SIM_rolling_CSD"
 
 # =============================================================================
 # Main
@@ -26,5 +26,13 @@ time, force_coeff, moment_coeff = compute_cfd_coefficients(states, maneuvre, cfd
 
 force_coeff_sd, moment_coeff_sd = compute_sd_coefficients(maneuvre,len(time))
 
-plot_aerodynamic_coefficients(time,force_coeff, moment_coeff, force_coeff_sd, moment_coeff_sd)
+# Axis limits estimated from the image
+ylims = [
+    [(-0.027, 0.157), (-0.080, 0.000)],  # Cx, Cl
+    [(-0.016, 0.016), (-0.133, 0.058)],  # Cy, Cm
+    [( 0.850, 1.530), (-0.022, 0.003)],  # Cz, Cn
+]
+
+plot_aerodynamic_coefficients(time, force_coeff, moment_coeff, force_coeff_sd, moment_coeff_sd,
+                              xlim=(0.0, 9.0), ylims=ylims)
 

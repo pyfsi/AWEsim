@@ -9,6 +9,10 @@ from AWEsim.functions.kinematics.DCM import update_dcm, dcm_to_euler
 from AWEsim.functions.kinematics.maneuvre_to_states import maneuver_to_states
 from AWEsim.functions.kinematics.rigid_body_motion_fluent import rigid_body_motion_fluent
 
+# Plot font (same as functions/postprocessing/plotting.py)
+font = {"family": "sans-serif", "weight": "normal", "size": 15}
+plt.rc("font", **font)
+
 # TODO
 # Plot aircraft in 3D trajectory
 
@@ -25,17 +29,17 @@ print_VWE_dim = False
 b = megawes["wing_span"]
 c = megawes["reference_chord"]
 
-#
+# -----------------------------
 # Functions to build maneuvre
-#
+# -----------------------------
 
 # Ramp function to smoothly transition between two values over a specified time interval
 def ramp(t, t_start, t_end):
     return np.clip((t - t_start) / (t_end - t_start), 0.0, 1.0)
 
-#
+# -----------------------------
 # Define maneuvre
-#
+# -----------------------------
 
 # Nominal/starting condition
 Vw = 10  # Present wind to stabilize CFD simulation
@@ -129,7 +133,7 @@ ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 
 #  Plot maneuvre
-fig, axs = plt.subplots(3, 1, figsize=(10, 8), sharex=True)
+fig, axs = plt.subplots(3, 1, figsize=(6, 8), sharex=True)
 
 # ==============================================================
 # (1) Airspeed + aerodynamic angles
@@ -141,13 +145,13 @@ l1 = ax1.plot(maneuvre[:, 0], maneuvre[:, 1], lw=2, label=r'$V_a$', color='tab:b
 l2 = ax1b.plot(maneuvre[:, 0], np.rad2deg(maneuvre[:, 2]), lw=2, label=r'$\alpha$', color='tab:orange')
 l3 = ax1b.plot(maneuvre[:, 0], np.rad2deg(maneuvre[:, 3]), lw=2, label=r'$\beta$', color='tab:green')
 
-ax1.set_ylabel(r'$V_a$ [m/s]', color='tab:blue')
+ax1.set_ylabel(r'Airspeed $V_a$ [m/s]', color='tab:blue')
 ax1b.set_ylabel('Angle [deg]')
 ax1.grid(True)
 
 lines = l1 + l2 + l3
 labels = [l.get_label() for l in lines]
-ax1.legend(lines, labels, loc='best')
+ax1.legend(lines, labels, loc='upper right')
 
 # ==============================================================
 # (2) Control surface deflections
@@ -158,7 +162,7 @@ axs[1].plot(maneuvre[:, 0], np.rad2deg(maneuvre[:, 9]), lw=2, label=r'$\delta_r$
 
 axs[1].set_ylabel('Deflection [deg]')
 axs[1].grid(True)
-axs[1].legend(loc='best')
+axs[1].legend(loc='upper right')
 
 # ==============================================================
 # (3) Angular rates
@@ -167,10 +171,10 @@ axs[2].plot(maneuvre[:, 0], np.rad2deg(maneuvre[:, 4]), lw=2, label=r'$\omega_x$
 axs[2].plot(maneuvre[:, 0], np.rad2deg(maneuvre[:, 5]), lw=2, label=r'$\omega_y$')
 axs[2].plot(maneuvre[:, 0], np.rad2deg(maneuvre[:, 6]), lw=2, label=r'$\omega_z$')
 
-axs[2].set_ylabel('Rate [deg/s]')
+axs[2].set_ylabel('Angular Rate [deg/s]')
 axs[2].set_xlabel('Time [s]')
 axs[2].grid(True)
-axs[2].legend(loc='best')
+axs[2].legend(loc='upper right')
 
 plt.tight_layout()
 
