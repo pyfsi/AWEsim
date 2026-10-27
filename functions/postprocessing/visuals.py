@@ -61,7 +61,7 @@ def plot_flow_property(ax, cfd, x, y, z, flow_property):
 
     """Plot the selected CFD flow property."""
 
-    #TODO: replace x,y,x with points
+    #TODO: replace x,y,x with points (1 argument) and use points[:,0], points[:,1], points[:,2] instead of x,y,z
 
     if flow_property == "P":
 
@@ -148,8 +148,8 @@ def plot_timestep(timestep, cfd, states, flow_property= "P"):
 # Create single visualization
 # =============================================================================
 
-def create_single_visual(timestep, RESULTS_DIR, COMPONENTS, STATES_FILE, FLOW_PROPERTY, ANIMATION_DIR, FRAME_PREFIX, DPI,PLOT = True):
-    """Create and save one visualization."""
+def create_single_visual(timestep, RESULTS_DIR, COMPONENTS, STATES_FILE, FLOW_PROPERTY, ANIMATION_DIR, FRAME_PREFIX, DPI,PLOT = True, SAVE = True):
+    """Create one visualization, optionally save and/or show it."""
 
     #Get state and CFD data
     states = get_state_data(STATES_FILE)
@@ -159,12 +159,15 @@ def create_single_visual(timestep, RESULTS_DIR, COMPONENTS, STATES_FILE, FLOW_PR
     fig = plot_timestep(timestep,cfd_data, states, flow_property=FLOW_PROPERTY)
 
     #Save and show the figure
-    ANIMATION_DIR.mkdir(parents=True, exist_ok=True)
-    filename = (ANIMATION_DIR / f"{FRAME_PREFIX}{timestep:04d}.png")
-    fig.savefig(filename, dpi=DPI, bbox_inches="tight")
-    print(f"Saved: {filename}")
+    if SAVE:
+        ANIMATION_DIR.mkdir(parents=True, exist_ok=True)
+        filename = (ANIMATION_DIR / f"{FRAME_PREFIX}{timestep:04d}.png")
+        fig.savefig(filename, dpi=DPI, bbox_inches="tight")
+        print(f"Saved: {filename}")
     if PLOT:
         plt.show()
+    else:
+        plt.close(fig)
 
 # =============================================================================
 # Create animation frames

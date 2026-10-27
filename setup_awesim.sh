@@ -119,6 +119,7 @@ fi
 
 # TODO: put AWEsim_largefiles on FM (non-personal) account
 # TODO: check if files already exist before copying
+# TODO: use: scp $USER@cfdpc03:/lusers/temp/AWEsim_largefiles
 
 cd ~/Software
 
