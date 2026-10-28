@@ -17,7 +17,7 @@ import math as m
 from scipy import interpolate
 from pathlib import Path
 
-from functions.postprocessing.compute import calculate_aerodynamic_properties
+from AWEsim.functions.postprocessing.compute import calculate_aerodynamic_properties
 
 HERE = Path(__file__).resolve().parent
 
