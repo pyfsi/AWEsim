@@ -46,15 +46,14 @@ reconstructed = reconstruct_body_coefficients(states)
 # Plot results
 # =============================================================================
 
-# plot_trajectory(reference, states)
+plot_trajectory(reference, states)
 #plot_motion(reference, states)
-# plot_power(reference, states, power)
-plot_tether(reference, states, tether_tension)
-# plot_control_surfaces(reference, states)
-# plot_angular_rates(reference, states)
+#plot_power(reference, states, power)
+#plot_tether(reference, states, tether_tension)
+#plot_control_surfaces(reference, states)
+#plot_angular_rates(reference, states)
 #plot_aerodynamic_properties(reference,aero)
-plot_body_coefficients(body_ref, body_mpc, body_cfd)
-# plot_lift_drag_coefficients(reference, wind_mpc, wind_cfd)
-
+#plot_body_coefficients(body_ref, body_mpc, body_cfd)
+#plot_lift_drag_coefficients(reference, wind_mpc, wind_cfd)
 #plot_coefficient_contributions(reconstructed, contributions=["total", "angles", "rotation", "control_surfaces"])
 
