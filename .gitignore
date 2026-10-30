@@ -2,7 +2,6 @@
 cases/case_megawes_2loop_20mps
 cases/case_megawes_maneuvres/SIM_test_main2/
 cases/case_megawes_maneuvres/SIM_test_rates2/
-cases/case_megawes_1loop_12mps/PRE/CFD/
 POST_declutter*
 POST_New
 

@@ -8,7 +8,19 @@ See AWEsim workflow in slides.
 
 ### Meshing aircraft components
 
+- Use of mshGen
+- `Mesh_generate_X.py`
+- See mshGen documentation and openFOAM instructions
+- mirror and prepare grids
+
 ### Configuring aircraft components
+
+- Input: aircraft component `.cas` files.
+- `make_aircraft.jou`
+- `prepare_journal.py `: declection CS
+-  `make_aircraft_ready.jou`: run with FLuent
+- `aircraft.cas`
+
 
 ## 3. Aircraft identification
 
@@ -58,6 +70,14 @@ Some tips:
 
 ## 5. Setting up the virtual wind environment (VWE)
 
+- Input
+    - Wind profile in `ABL_SST.c`
+    - Background mesh
+    - `aircraft_translated.cas` manually rotated and translates
+    - `set_simulation.jou` manual checks and changes
+- Manual checks and changes
+- Output: 
+    - `simulation.cas/dat`
 
 ## 2./5. Structural modelling (CSM)
 
