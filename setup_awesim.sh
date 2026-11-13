@@ -33,9 +33,9 @@ if [ ! -d "awebox" ]; then
     export PIP_TARGET=$SOFTWAREPATH/tools 
     pip install -r AWEsim/requirements.txt
     
-    scp /cfdfile1/data/fm/niels/AWEsim_largefiles/awebox/awebox.zip $SOFTWAREPATH
-    scp /cfdfile1/data/fm/niels/AWEsim_largefiles/awebox/hsl.zip $SOFTWAREPATH
-    scp /cfdfile1/data/fm/niels/AWEsim_largefiles/awebox/casadi.zip $SOFTWAREPATH/tools
+    scp /cfdfile1/data/fm/AWE/AWEsim_largefiles/awebox/awebox.zip $SOFTWAREPATH
+    scp /cfdfile1/data/fm/AWE/AWEsim_largefiles/awebox/hsl.zip $SOFTWAREPATH
+    scp /cfdfile1/data/fm/AWE/AWEsim_largefiles/awebox/casadi.zip $SOFTWAREPATH/tools
 
     unzip awebox.zip
     unzip hsl.zip
@@ -117,9 +117,7 @@ fi
 ## Download example (CFD) files from UGent FM cluster and prepare examples
 # =============================================================================
 
-# TODO: put AWEsim_largefiles on FM (non-personal) account
 # TODO: check if files already exist before copying
-# TODO: use: scp $USER@cfdpc03:/lusers/temp/AWEsim_largefiles
 
 cd ~/Software
 
@@ -128,15 +126,15 @@ mkdir ./AWEsim/cases/case_megawes_1loop_12mps/SIM0/CFD/
 mkdir ./AWEsim/cases/case_megawes_1loop_12mps/SIM0/CFD/Results
 mkdir ./AWEsim/cases/case_megawes_1loop_12mps/SIM0/CFD/Results_debug
 
-scp /cfdfile1/data/fm/niels/AWEsim_largefiles/cases/case_megawes_1loop_12mps/simulation* ./AWEsim/cases/case_megawes_1loop_12mps/SIM0/CFD/
-scp /cfdfile1/data/fm/niels/AWEsim_largefiles/cases/case_megawes_1loop_12mps/mpc_solver.c ./AWEsim/cases/case_megawes_1loop_12mps/SIM0/AWEbox/Flight_path/
+scp /cfdfile1/data/fm/AWE/AWEsim_largefiles/cases/case_megawes_1loop_12mps/simulation* ./AWEsim/cases/case_megawes_1loop_12mps/SIM0/CFD/
+scp /cfdfile1/data/fm/AWE/AWEsim_largefiles/cases/case_megawes_1loop_12mps/mpc_solver.c ./AWEsim/cases/case_megawes_1loop_12mps/SIM0/AWEbox/Flight_path/
 
 # Case megawes_maneuvres
 mkdir ./AWEsim/cases/case_megawes_maneuvres/SIM0_rolling_CSD/CFD/
 mkdir ./AWEsim/cases/case_megawes_maneuvres/SIM0_rolling_CSD/CFD/Results
 mkdir ./AWEsim/cases/case_megawes_maneuvres/SIM0_rolling_CSD/CFD/Results_debug
 
-scp /cfdfile1/data/fm/niels/AWEsim_largefiles/cases/case_megawes_maneuvres/simulation* ./AWEsim/cases/case_megawes_maneuvres/SIM0_rolling_CSD/CFD/
+scp /cfdfile1/data/fm/AWE/AWEsim_largefiles/cases/case_megawes_maneuvres/simulation* ./AWEsim/cases/case_megawes_maneuvres/SIM0_rolling_CSD/CFD/
 
 
 
